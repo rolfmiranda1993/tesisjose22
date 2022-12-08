@@ -1,0 +1,89 @@
+{% extends "base/base.html" %}
+
+{% block title %}Ingresos{% endblock title %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="text-center">Ingresos<i class="fas fa-users"></i></h3>
+        <div class="col-md-3 pb-2">
+            <a href="{% url 'pymes-ingreso-create' %}">
+                <button type="button" class="btn btn-success">
+                    Agregar Ingreso
+                </button>
+            </a>
+        </div>
+        {% if object_list %}
+        <div class="card card-body" style="overflow:scroll">
+            <table border="2" class="table table-hover table-primary" id="myTable">
+                <thead>
+                    <th>Nombre</th>
+                    <th>Rubro</th>
+                    <th>Forma de Pago</th>
+                    <th>Tipo de Cobro</th>
+                    <th>Nombre de pago</th>
+                    <th>Titular de Pago</th>
+                    <th>Monto de Pago</th>
+                    <th>Factura Nro</th>
+                    <th>Accion</th>
+                </thead>
+                <tbody class="text-dark">
+                    {% for ingreso in object_list %}
+                        <tr>
+                            <td> {{ ingreso.nombre }} </td>
+                            <td> {{ ingreso.rubro }} </td>
+                            <td> {{ ingreso.forma_de_pago }} </td>
+                            <td> {{ ingreso.tipo_de_cobro }} </td>
+                            <td> {{ ingreso.nombre_de_pago }} </td>
+                            <td> {{ ingreso.titular_de_pago }} </td>
+                            <td> {{ ingreso.monto_de_pago }} </td>
+                            <td> {{ ingreso.numero_de_factura }} </td>
+                            <td>
+                                <a href="{% url 'pymes-ingreso-update' ingreso.id %}">
+                                    <button type="button">
+                                        EDITAR
+                                    </button>
+                                </a>
+                                <a href="{% url 'pymes-ingreso-logic-delete' ingreso.id %}">
+                                    <button type="button" >
+                                        ELIMINAR
+                                    </button> 
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if object_list.has_previous %}
+                <a href="?=page=1">Primera</a>
+                <a href="?page={{object_list.previous_page_number}}">Anterior</a>
+            {% endif %}
+
+            Pagina {{ object_list.number }} de {{ object_list.paginator.num_pages }}   
+
+            {% if object_list.has_next %}
+                <a href="?page={{object_list.next_page_number}}">Siguiente</a>
+                <a href="?page={{object_list.paginator.num_pages}}">Ultima</a>
+            {% endif %}
+
+        </div>
+    {% else %}
+        <h1>No existen Ingresos registrados.</h1>
+    {% endif %}
+    </div>
+</div>
+{% if messages %}
+{% for message in messages %}
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Error...',
+        text: "{{message}}",
+    })
+</script>
+{% endfor %}
+{% endif %}
+{% endblock %}

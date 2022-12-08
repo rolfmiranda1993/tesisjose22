@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Org charts</title>
+    <link href="{% static 'members/css/jquery.orgchart.css' %}" rel="stylesheet">
+    <link href="{% static 'members/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'members/css/oc_style.css' %}" rel="stylesheet">
+    <link href="{% static 'members/css/chart_style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'members/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'members/css/style.css' %}">
+  </head>
+  
+  <body>
+    <div class="col-md-3 pb-2">
+      <a href="{% url 'enter_staff' %}">
+          <button type="button" class="btn btn-success">
+              Volver
+          </button>
+      </a>
+  </div>
+  <div id="chart-container"></div>
+      {% block content %}
+      {% endblock %}
+
+    <script type="text/javascript" src="{% static 'members/js/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'members/js/jquery.orgchart.js' %}"></script>
+    <script src="{% static 'members/js/bootstrap.js' %}"></script>
+    
+    {% block javascript %}
+    {% endblock %}
+
+  </body>
+</html>

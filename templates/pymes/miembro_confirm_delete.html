@@ -1,0 +1,17 @@
+{% extends "base/base.html" %}
+
+
+{% block title %}Eliminar Colaborador{% endblock title %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div>
+    <h3>Eliminar Colaborador</h3>
+    <form style="text-align: center; " method="POST">
+        {% csrf_token %}
+        <h1>Desea eliminar {{ object }} ?</h1>
+        <button type="submit">ELIMINAR</button>
+    </form>
+</div>
+
+{% endblock %} 

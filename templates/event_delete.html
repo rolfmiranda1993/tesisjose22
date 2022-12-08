@@ -1,0 +1,14 @@
+<!-- templates/article_delete.html -->
+{% extends 'base.html' %}
+
+{% block title %}
+Eliminar Tarea
+{% endblock %}
+
+{% block content %}
+    <h1>Borrar</h1>
+    <form action="" method="post">{% csrf_token %}
+        <p>Estas seguro que deseas eliminar esta tarea?</p>
+        <button class="btn btn-danger ml-2" type="submit">Confirmar</button>
+    </form>
+{% endblock content %}

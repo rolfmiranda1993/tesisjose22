@@ -1,0 +1,16 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div>
+    <h3>Actualizar Rubro</h3>
+    <form style="text-align: center; " method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">ACTUALIZAR</button>
+    </form>
+</div>
+
+{% endblock %} 

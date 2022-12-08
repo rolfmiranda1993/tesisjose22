@@ -1,0 +1,110 @@
+{% extends "base/base.html" %}
+
+{% block title %}Lista de Colaboradores{% endblock title %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="text-center">Colaboradores<i class="fas fa-users"></i></h3>
+        <div class="col-md-3 pb-2">
+            <a href="{% url 'pymes-miembro-create' %}">
+                <button type="button" class="btn btn-success">
+                    Agregar nuevo Colaborador
+                </button>
+            </a>
+        </div>
+        {% if object_list %}
+        <div class="card card-body" style="overflow:scroll">
+            <table border="2" class="table table-hover table-primary" id="myTable">
+                <thead>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Nacionalidad</th>
+                    <th>CIN</th>
+                    <th>Nacimiento</th>
+                    <th>Tel. Particular</th>
+                    <th>Mail Particular</th>
+                    <th>Tel.Corporativo</th>
+                    <th>Mail Corporativo</th>
+                    <th>Ingreso</th>
+                    <th>Salida</th>
+                    <th>Motivo</th>
+                    <th>Cargo</th>
+                    <th>Notas</th>
+                    <th>SET</th>
+                    <th>Estado Civil</th>
+                    <th>Hijos</th>
+                    <th>Genero</th>
+                    <th>Organigrama</th>
+                    <th>Accion</th>
+                </thead>
+                <tbody class="text-dark">
+                    {% for miembro in object_list %}
+                        <tr>
+                            <td> {{ miembro.nombres }} </td>
+                            <td> {{ miembro.apellidos }} </td>
+                            <td> {{ miembro.nacionalidad }} </td>
+                            <td> {{ miembro.numero_de_documento }} </td>
+                            <td> {{ miembro.fecha_de_nacimiento }} </td>
+                            <td> {{ miembro.telefono_particular }} </td>
+                            <td> {{ miembro.telefono_corporativo }} </td>
+                            <td> {{ miembro.mail_particular }} </td>
+                            <td> {{ miembro.mail_corporativo }} </td>
+                            <td> {{ miembro.fecha_de_ingreso }} </td>
+                            <td> {{ miembro.fecha_de_salida }} </td>
+                            <td> {{ miembro.motivo_de_salida }} </td>
+                            <td> {{ miembro.cargo }} </td>
+                            <td> {{ miembro.notas_adicionales }} </td>
+                            <td> {{ miembro.contribuyente_set }} </td>
+                            <td> {{ miembro.estado_civil }} </td>
+                            <td> {{ miembro.hijos }} </td>
+                            <td> {{ miembro.genero }} </td>
+                            <td> {{ miembro.Asig_Organigrama }} </td>
+                            <td>
+                                <a href="{% url 'pymes-miembro-update' miembro.id %}">
+                                    <button type="button">
+                                        EDITAR
+                                    </button>
+                                </a>
+                                <a href="{% url 'pymes-miembro-logic-delete' miembro.id %}">
+                                    <button type="button" >
+                                        ELIMINAR
+                                    </button> 
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if object_list.has_previous %}
+                <a href="?=page=1">Primera</a>
+                <a href="?page={{object_list.previous_page_number}}">Anterior</a>
+            {% endif %}
+
+            Pagina {{ object_list.number }} de {{ object_list.paginator.num_pages }}   
+
+            {% if object_list.has_next %}
+                <a href="?page={{object_list.next_page_number}}">Siguiente</a>
+                <a href="?page={{object_list.paginator.num_pages}}">Ultima</a>
+            {% endif %}
+
+        </div>
+    {% else %}
+        <h1>No existen Colaboradores registrados.</h1>
+    {% endif %}
+    </div>
+</div>
+{% if messages %}
+{% for message in messages %}
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Error...',
+        text: "{{message}}",
+    })
+</script>
+{% endfor %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base/base.html" %}
+
+{% block title %}Roles{% endblock title %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="text-center">Roles<i class="fas fa-users"></i></h3>
+        <div class="col-md-3 pb-2">
+            <a href="{% url 'pymes-rol-create' %}">
+                <button type="button" class="btn btn-success">
+                    Agregar Rol
+                </button>
+            </a>
+        </div>
+        {% if object_list %}
+        <div class="card card-body" style="overflow:scroll">
+            <table border="2" class="table table-hover table-primary" id="myTable">
+                <thead>
+                    <th>Nombre</th>
+                    <th>Sigla</th>
+                    <th>Empleado/Proveedor</th>
+                    <th>Area</th>
+                    <th>Accion</th>
+                </thead>
+                <tbody class="text-dark">
+                    {% for rol in object_list %}
+                        <tr>
+                            <td> {{ rol.nombre }} </td>
+                            <td> {{ rol.sigla }} </td>
+                            <td> {{ rol.empleado_o_proveedor }} </td>
+                            <td> {{ rol.nombre_de_area }} </td>
+                            <td>
+                                <a href="{% url 'pymes-rol-update' rol.id %}">
+                                    <button type="button">
+                                        EDITAR
+                                    </button>
+                                </a>
+                                <a href="{% url 'pymes-rol-logic-delete' rol.id %}">
+                                    <button type="button" >
+                                        ELIMINAR
+                                    </button> 
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if object_list.has_previous %}
+                <a href="?=page=1">Primera</a>
+                <a href="?page={{object_list.previous_page_number}}">Anterior</a>
+            {% endif %}
+
+            Pagina {{ object_list.number }} de {{ object_list.paginator.num_pages }}   
+
+            {% if object_list.has_next %}
+                <a href="?page={{object_list.next_page_number}}">Siguiente</a>
+                <a href="?page={{object_list.paginator.num_pages}}">Ultima</a>
+            {% endif %}
+
+        </div>
+    {% else %}
+        <h1>No existen roles registrados.</h1>
+    {% endif %}
+    </div>
+</div>
+{% if messages %}
+{% for message in messages %}
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Error...',
+        text: "{{message}}",
+    })
+</script>
+{% endfor %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'base2.html' %}
+{% load static %}
+
+{% block content%}
+{% if messages %}
+       {% for message in messages %}
+       <p {% if message.tags %} class="alert alert-{{message.tags}} mb-5" {% endif %}>{{message}}</p>
+       {% endfor %}
+    {% endif %}
+
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+
+    function filterNodes(keyWord) {
+    if(!keyWord.length) {
+      window.alert('Please enter staff number firstly.');
+      return;
+    }
+    else {
+      var $chart = $('.orgchart');
+
+      $chart.find('.node').filter(function(index, node) {
+          return $(node).text().toLowerCase().indexOf(keyWord) > -1;
+        }).addClass('matched')
+        .closest('table').parents('table').find('tr:first').find('.node').addClass('retained');
+
+      $chart.find('.matched,.retained').each(function(index, node) {
+        $(node).removeClass('slide-up')
+          .closest('.nodes').removeClass('hidden')
+          .siblings('.lines').removeClass('hidden');
+        var $unmatched = $(node).closest('table').parent().siblings().find('.node:first:not(.matched,.retained)')
+          .closest('table').parent().addClass('hidden');
+        $unmatched.parent().prev().children().slice(1, $unmatched.length * 2 + 1).addClass('hidden');
+      });
+
+      $chart.find('.matched').each(function(index, node) {
+        if (!$(node).closest('tr').siblings('.nodes').find('.matched').length) {
+          $(node).closest('tr').siblings().addClass('retained').parent().addClass('isChildrenCollapsed');
+        }
+      });
+    }
+  }
+
+  function clearFilterResult() {
+    $('.orgchart').removeClass('noncollapsable')
+      .find('.node').removeClass('matched retained')
+      .end().find('.hidden').removeClass('hidden')
+      .end().find('.slide-up, .slide-left, .slide-right').removeClass('slide-up slide-right slide-left');
+  }
+
+  $(function() {
+    var datasource = {{a_staff|safe}};
+
+    let nodeTemplate = function(data) {
+    return  `<div class="title"> ${data.staff_name}</div>
+            <div class="content" id="foo">
+               <div>Staff Name: ${data.staff_no}</div>
+               <div>Designation: ${data.designation}</div>
+            </div>`;
+    };
+
+    $('#chart-container').orgchart({
+      'nodeContent': 'designation',
+      'data': datasource,
+      'nodeId':'staff_no',
+      'nodeTemplate': nodeTemplate,
+      'createNode': function($node, data) {
+        var secondMenuIcon = $('<i>', {
+          'class': 'oci oci-info-circle second-menu-icon',
+          click: function() {
+            $(this).siblings('.second-menu').toggle();
+          }
+        });
+
+        var secondMenu = '<div class="second-menu"><img class="avatar" src="static/avatar/' + data.staff_no + '.jpeg"></div>';
+        $node.append(secondMenuIcon).append(secondMenu);
+      }
+    });
+
+   $(document).ready(function(){
+     var st = '{{staff | safe}}';
+     filterNodes(st);
+	});
+
+    $('#key-word').on('keyup', function(event) {
+      if (event.which === 13) {
+        filterNodes(this.value);
+      } else if (event.which === 8 && this.value.length === 0) {
+        clearFilterResult();
+      }
+    });
+  });
+
+</script>
+{% endblock %}
